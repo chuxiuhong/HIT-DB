@@ -1,7 +1,9 @@
 # coding=utf8
-__author__ = '楚休红'
+
 import logging
 import os
+
+__author__ = 'chuxiuhong'
 
 
 class memory():
@@ -15,10 +17,8 @@ class memory():
         self.__buffer_block_num = buffer_block_num
         self.__disk_block_num = disk_block_num
         self.__block_size = block_size
-        self.__buffer_flag = [0] * buffer_block_num
-        self.__disk_flag = [0] * disk_block_num
         self.io_num = 0
-        self.buffer = [0] * buffer_block_num
+        self.buffer = ['' for _ in range(buffer_block_num)]
         if 'disk' not in set(os.listdir(os.getcwd())):
             os.mkdir('disk')
         logging.basicConfig(level=logging.DEBUG,
@@ -26,7 +26,7 @@ class memory():
                             datefmt='%a, %d %b %Y %H:%M:%S',
                             filename=log_file_path,
                             filemode='w')
-        self.__newdisk__()
+        self._newdisk()
 
     def free(self, block_num):
         '''
@@ -35,7 +35,6 @@ class memory():
         :return: None
         '''
         logging.debug('free No.%s buffer block' % block_num)
-        self.__buffer_flag[block_num] = 0
 
     def get(self, block_num):
         '''
@@ -72,8 +71,6 @@ class memory():
         '''
         self.buffer[buffer_block] = open('./disk/%s.ziqi' % disk_block, 'r').read()
         self.io_num += 1
-        if if_free:
-            self.__disk_flag[disk_block] = 0
         logging.debug('load No.%s disk block to No.%s buffer block' % (disk_block, buffer_block))
 
     def store(self, buffer_block, disk_block):
@@ -95,23 +92,24 @@ class memory():
         '''
         return self.io_num
 
-    def draw(self):
+    def __str__(self):
         '''
         在终端输出当前Buffer和Disk的存储状态，IO次数
-        :return: None
+        :return: ''
         '''
         lines = max(self.__buffer_block_num, self.__disk_block_num)
-        print "%-20s %-30s %-30s" % ("Index", "Buffer", "Disk")
+        print "%-20s %-50s %-50s" % ("Index", "Buffer", "Disk")
         for index in range(lines):
             if index >= self.__buffer_block_num:
-                print "%-20s %-30s %-30s" % (index, '', open('./disk/%s.ziqi' % index, 'r').read())
+                print "%-20s %-50s %-50s" % (index, '', open('./disk/%s.ziqi' % index, 'r').read())
             elif index >= self.__disk_block_num:
-                print "%-20s %-30s %-30s" % (index, self.buffer[index], "")
+                print "%-20s %-50s %-50s" % (index, self.buffer[index], "")
             else:
-                print "%-20s %-30s %-30s" % (index, self.buffer[index], open('./disk/%s.ziqi' % index, 'r').read())
+                print "%-20s %-50s %-50s" % (index, self.buffer[index], open('./disk/%s.ziqi' % index, 'r').read())
         print "Disk IO load/store times = %s" % self.io_num
+        return ''
 
-    def __newdisk__(self):
+    def _newdisk(self):
         '''
         初始化文件块
         :return: None
@@ -124,6 +122,8 @@ class memory():
             open('./disk/' + str(i) + '.ziqi', 'w')
         logging.debug('init %s disk blocks' % self.__disk_block_num)
 
+    def __getitem__(self, item):
+        return self.get(item)
 
-p = memory(8,20,3)
-p.draw()
+    def __setitem__(self, key, value):
+        self.set(key, value)
