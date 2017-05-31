@@ -1,1 +1,4 @@
-Sun, 21 May 2017 09:44:34 init 20 disk blocks
+Wed, 31 May 2017 11:03:22 init 12 disk blocks
+Wed, 31 May 2017 11:03:22 set No.0 buffer block = 1 2 3 4 5
+Wed, 31 May 2017 11:03:22 store No.0 buffer block to No.1 disk blocks
+Wed, 31 May 2017 11:03:22 load No.1 disk block to No.5 buffer block
