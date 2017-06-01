@@ -114,10 +114,6 @@ class memory():
         初始化文件块
         :return: None
         '''
-        disk_file_list = os.listdir(os.getcwd())
-        for fl in disk_file_list:
-            if fl[-5:] == 'ziqi':
-                os.remove(fl)
         for i in range(self.__disk_block_num):
             open('./disk/' + str(i) + '.ziqi', 'w')
         logging.debug('init %s disk blocks' % self.__disk_block_num)
