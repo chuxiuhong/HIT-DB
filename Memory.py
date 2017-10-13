@@ -1,8 +1,8 @@
 # coding=utf8
-
+from __future__ import print_function
 import logging
 import os
-from __future__ import print_function
+
 __author__ = 'chuxiuhong'
 
 
