@@ -2,11 +2,11 @@
 
 import logging
 import os
-
+from __future__ import print_function
 __author__ = 'chuxiuhong'
 
 
-class memory():
+class Memory():
     def __init__(self, buffer_block_num, disk_block_num, block_size, log_file_path='action.log'):
         '''
         初始化存储系统
@@ -54,10 +54,10 @@ class memory():
         '''
         if type(data) == list or type(data) == tuple:
             if len(data) > self.__block_size:
-                raise ValueError, "Too much data for a block"
+                raise (ValueError, "Too much data for a block")
             data = ' '.join(map(str, data))
         elif type(data) != int:
-            raise ValueError, "Wrong data(should be Integer)"
+            raise (ValueError, "Wrong data(should be Integer)")
         self.buffer[block_num] = str(data)
         logging.debug('set No.%s buffer block = %s' % (block_num, data))
 
@@ -98,15 +98,15 @@ class memory():
         :return: ''
         '''
         lines = max(self.__buffer_block_num, self.__disk_block_num)
-        print "%-20s %-50s %-50s" % ("Index", "Buffer", "Disk")
+        print_function("%-20s %-50s %-50s" % ("Index", "Buffer", "Disk"))
         for index in range(lines):
             if index >= self.__buffer_block_num:
-                print "%-20s %-50s %-50s" % (index, '', open('./disk/%s.ziqi' % index, 'r').read())
+                print_function("%-20s %-50s %-50s" % (index, '', open('./disk/%s.ziqi' % index, 'r').read()))
             elif index >= self.__disk_block_num:
-                print "%-20s %-50s %-50s" % (index, self.buffer[index], "")
+                print_function("%-20s %-50s %-50s" % (index, self.buffer[index], ""))
             else:
-                print "%-20s %-50s %-50s" % (index, self.buffer[index], open('./disk/%s.ziqi' % index, 'r').read())
-        print "Disk IO load/store times = %s" % self.io_num
+                print_function("%-20s %-50s %-50s" % (index, self.buffer[index], open('./disk/%s.ziqi' % index, 'r').read()))
+        print_function("Disk IO load/store times = %s" % self.io_num)
         return ''
 
     def _newdisk(self):

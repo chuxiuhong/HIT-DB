@@ -1,5 +1,5 @@
 #coding=utf8
-from memory import memory
+from Memory import memory
 
 m = memory(10,12,10)
 
